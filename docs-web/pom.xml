@@ -198,6 +198,10 @@
                 <contextPath>/docs-web</contextPath>
                 <overrideDescriptor>src/dev/main/webapp/web-override.xml</overrideDescriptor>
               </webApp>
+              <httpConnector>
+                <host>10.16.88.247</host>
+                <port>8089</port>
+              </httpConnector>
             </configuration>
           </plugin>
           
