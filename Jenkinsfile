@@ -11,15 +11,15 @@ pipeline {
         sh 'mvn pmd:pmd'
       }
     }
-    stage('Test report') {
-      steps {
-        sh 'mvn test'
-        sh 'mvn surefire-report:report'
-      }
-    }
     stage('Doc') {
       steps {
         sh 'mvn javadoc:javadoc --fail-never'
+      }
+    }
+    stage('Test report') {
+      steps {
+        sh 'mvn test --fail-never'
+        sh 'mvn surefire-report:report'
       }
     }
   }
