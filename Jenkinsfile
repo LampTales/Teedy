@@ -1,24 +1,22 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('Build image') {
       steps {
-        sh 'mvn -B -DskipTests clean package'
+        sh 'docker build -t teedy2024_manual .'
       }
     }
-    stage('pmd') {
+    stage('upload image') {
       steps {
-        sh 'mvn pmd:pmd'
+        sh 'docker push lamptales/teedy_local:v1.0'
       }
     }
-    stage('Doc') {
+    stage('running container') {
       steps {
-        sh 'mvn javadoc:javadoc --fail-never'
-      }
-    }
-    stage('Test report') {
-      steps {
-        sh 'mvn test'
+        sh 'docker pull lamptales/teedy_local:v1.0'
+        sh 'docker run -d -p 8084:8080 lamptales/teedy_local:v1.0'
+        sh 'docker run -d -p 8085:8080 lamptales/teedy_local:v1.0'
+        sh 'docker run -d -p 8086:8080 lamptales/teedy_local:v1.0'
       }
     }
   }
