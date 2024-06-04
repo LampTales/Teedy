@@ -36,4 +36,37 @@ public class TestJpa extends BaseTransactionalTest {
         // Authenticate using the database
         Assert.assertNotNull(new InternalAuthenticationHandler().authenticate("username", "12345678"));
     }
+
+    @Test
+    public void testJpa2() throws Exception {
+        // Create a user
+        UserDao userDao = new UserDao();
+        User user = new User();
+        user.setUsername("username");
+        user.setPassword("12345678");
+        user.setEmail("fsdf@docs.com");
+        user.setRoleId("admin");
+        user.setStorageQuota(10L);
+        String id = userDao.create(user, "me");
+
+        TransactionUtil.commit();
+
+        user = userDao.getById(id);
+        Assert.assertNotNull(user);
+        Assert.assertEquals("fsdf@docs.com", user.getEmail());
+        Assert.assertEquals("admin", user.getRoleId());
+        Assert.assertEquals("12345678", user.getPassword());
+
+        userDao.updatePassword(user, "87654321");
+
+        TransactionUtil.commit();
+
+        user = userDao.getById(id);
+        Assert.assertNotNull(user);
+        Assert.assertEquals("87654321", user.getPassword());
+
+
+        // Authenticate using the database
+        Assert.assertNotNull(new InternalAuthenticationHandler().authenticate("username", "87654321"));
+    }
 }
